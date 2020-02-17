@@ -17,7 +17,6 @@ moment.locale('ro');
 let store = createStore(rootReducer, applyMiddleware(thunk));
 
 function App() {
-
   return <>
     <CssBaseline/>
     <MuiPickersUtilsProvider utils={ MomentUtils }>

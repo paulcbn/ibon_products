@@ -1,0 +1,1 @@
+export { default as ProductsSearchIndex } from '../ProductsSearchWidget/ProductsSearchWidget';

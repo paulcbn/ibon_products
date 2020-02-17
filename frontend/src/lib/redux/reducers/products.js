@@ -1,78 +1,51 @@
 const initialState = {
+  pageCount: 0,
+  pageSize: 20,
+  count: 0,
+  currentPage: 1,
+  next: null,
+  previous: null,
+  results: [],
 
+  ordering: '',
+
+  pageLoading: false,
+  pageError: null,
 };
 
 
-export default function auth(state = initialState, action) {
+export default function products(state = initialState, action) {
   switch (action.type) {
-    case 'CURRENT_USER_LOADING':
+    case 'CURRENT_PAGE_LOADING':
       return {
         ...state,
-        currentUser: null,
-        currentUserLoading: true,
-        currentUserErrors: {},
+        pageLoading: true,
+        pageError: null,
       };
-    case 'CURRENT_USER_ERROR':
-      removeToken();
+    case 'CURRENT_PAGE_ERROR':
       return {
         ...state,
-        currentUser: null,
-        currentUserLoading: false,
-        currentUserErrors: action.data,
-        isAuthenticated: false,
+        pageLoading: false,
+        pageError: action.data,
       };
-    case 'CURRENT_USER_LOADED':
+    case 'CURRENT_PAGE_LOADED':
       return {
         ...state,
-        currentUser: action.data,
-        currentUserLoading: false,
-        currentUserErrors: {},
-        isAuthenticated: true,
+        pageLoading: false,
+        pageError: null,
+        ...action.data, //this gives: count, next, previous, results
       };
-
-    case 'LOGIN_LOADING':
-      removeToken();
+    case 'CHANGE_PAGE_SIZE':
       return {
         ...state,
-        currentUser: null,
-        token: null,
-        loginLoading: true,
-        loginErrors: {},
-        isAuthenticated: false,
-      };
-    case 'LOGIN_ERROR':
-      removeToken();
-      return {
-        ...state,
-        currentUser: null,
-        token: null,
-        loginLoading: false,
-        loginErrors: action.data,
-        isAuthenticated: false,
-      };
-    case 'LOGIN_LOADED':
-      setToken(action.data.token);
-      return {
-        ...state,
-        currentUser: action.data.user,
-        token: action.data.token,
-        loginLoading: false,
-        loginErrors: {},
-        isAuthenticated: true,
+        pageSize: action.data,
       };
 
-    case 'LOGOUT_LOADED':
-      removeToken();
+    case 'CHANGE_ORDERING':
       return {
         ...state,
-        currentUser: null,
-        token: null,
-        isAuthenticated: false,
+        ordering: action.data,
       };
-
-    case 'CLEAR_AUTH_ERRORS':
-      return { ...state, loginErrors: {}, registerErrors: {}, currentUserErrors: {} };
-
     default:
       return state;
   }
