@@ -5,31 +5,33 @@ import Table from '@material-ui/core/Table';
 import TablePagination from '@material-ui/core/TablePagination';
 import React from 'react';
 import { OverlayCircularProgress } from '../OverlayCircularProgress';
+import { useTableWidgetStyles } from './styles';
 import TableData from './TableData';
 import TableToolbar from './TableToolbar';
 import { TableWidgetHeader } from './TableWidgetHeader';
-import { useTableWidgetStyles } from './styles';
 
 
-const TableWidget = ({ headers, onSort, title, data, count, page, rowsPerPage, rowsPerPageOptions, onChangePage, onChangeRowsPerPage, loading }) => {
+const TableWidget = ({ headers, onSort, title, data, count, page, rowsPerPage, rowsPerPageOptions, onChangePage, onChangeRowsPerPage, loading, onSearch, actions }) => {
   const classes = useTableWidgetStyles();
 
   return (
     <Box>
-      <Paper>
-        <TableToolbar title={ title }/>
-        <TableContainer className={ classes.tableContainer }>
-          <Table>
+      <Paper className={ classes.paper }>
+        <TableToolbar title={ title } onSearch={ onSearch }/>
+        <TableContainer>
+          <Table size={ 'small' }>
             <TableWidgetHeader
               headers={ headers }
               onSort={ onSort }
+              actions={ actions }
             />
             <TableData
+              actions={ actions }
               data={ data }
               headers={ headers }
+              loading={ loading }
             />
           </Table>
-          <OverlayCircularProgress show={ loading }/>
         </TableContainer>
         <TablePagination
           rowsPerPageOptions={ rowsPerPageOptions }
@@ -40,6 +42,7 @@ const TableWidget = ({ headers, onSort, title, data, count, page, rowsPerPage, r
           onChangePage={ onChangePage }
           onChangeRowsPerPage={ onChangeRowsPerPage }
         />
+        <OverlayCircularProgress show={ loading }/>
       </Paper>
     </Box>
   );

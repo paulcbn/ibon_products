@@ -1,3 +1,4 @@
+import { Container } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import React from 'react';
 
@@ -5,7 +6,9 @@ import React from 'react';
 const Layout = ({ children }) => {
   return <Box>
     this view is layouted
-    { children }
+    <Container>
+      { children }
+    </Container>
   </Box>;
 };
 

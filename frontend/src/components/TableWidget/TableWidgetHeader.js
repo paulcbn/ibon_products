@@ -2,10 +2,8 @@ import TableHead from '@material-ui/core/TableHead';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { deepGet } from '../../lib/utils';
 import { StyledTableCell, StyledTableRow, StyledTableSortLabel } from './StyledComponents';
-import { useHeaderCellStyle, useHeaderStyle } from './styles';
 
 const TableWidgetHeaderCell = ({ header, sortedHeaderId, sortDirection, onSort }) => {
-  const classes = useHeaderCellStyle();
 
   const { numeric, label, isSorted, sortable } = useMemo(() => ({
     numeric: deepGet(header, 'numeric', false),
@@ -42,8 +40,7 @@ const TableWidgetHeaderCell = ({ header, sortedHeaderId, sortDirection, onSort }
   );
 };
 
-export const TableWidgetHeader = ({ headers, onSort }) => {
-  const classes = useHeaderStyle();
+export const TableWidgetHeader = ({ headers, onSort, actions }) => {
 
   const [ sortingStatus, setSortingStatus ] = useState({ header: null, direction: 'asc' });
 
@@ -66,6 +63,8 @@ export const TableWidgetHeader = ({ headers, onSort }) => {
       setSortingStatus({ header: clickedHeader, direction: 'asc' });
   };
 
+  const hasActions = useMemo(() => +deepGet(actions, 'length', 0) > 0, [ actions ]);
+
   useEffect(() => {
     onSort && onSort(sortingStatus);
   }, [ onSort, sortingStatus ]);
@@ -81,6 +80,8 @@ export const TableWidgetHeader = ({ headers, onSort }) => {
           sortDirection={ sortDirection }
           onSort={ () => handleSort(header) }
         />) }
+
+        { hasActions && <StyledTableCell/> }
       </StyledTableRow>
     </TableHead>
   );

@@ -1,8 +1,8 @@
 import { TableBody } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
 import React, { useMemo } from 'react';
 import { deepGet } from '../../lib/utils';
 import { StyledTableCell, StyledTableRow } from './StyledComponents';
-import { useTableDataStyle } from './styles';
 
 const TableDataCell = ({ item, header }) => {
   const { numeric, field, render } = useMemo(() => ({
@@ -14,7 +14,6 @@ const TableDataCell = ({ item, header }) => {
   const value = useMemo(() => {
     if (render !== undefined)
       return render(item);
-
     return deepGet(item, field);
   }, [ item, field, render ]);
 
@@ -26,19 +25,27 @@ const TableDataCell = ({ item, header }) => {
   </StyledTableCell>;
 };
 
-const TableDataRow = ({ item, headers }) => {
+
+const TableDataRow = ({ item, headers, actions }) => {
+  const hasActions = useMemo(() => +deepGet(actions, 'length', 0) > 0, [ actions ]);
+
   return <StyledTableRow>
     { (headers || []).map(header => <TableDataCell key={ header.id } item={ item } header={ header }/>) }
+    { hasActions && <StyledTableCell align={ 'right' }>
+      { actions.map(({ id, Icon, onClick }) => <IconButton key={ id } size={ 'small' } onClick={ () => onClick(item) }>
+        <Icon/>
+      </IconButton>) }
+    </StyledTableCell> }
   </StyledTableRow>;
 };
 
-const TableData = ({ data, headers }) => {
-  const classes = useTableDataStyle();
+const TableData = ({ data, headers, actions }) => {
   return <TableBody>
     { (data || []).map(item => <TableDataRow
       key={ item.id }
       item={ item }
       headers={ headers }
+      actions={ actions }
     />) }
   </TableBody>;
 };

@@ -65,7 +65,7 @@ class ListRetrieveNecessaryRawMaterialSerializer(serializers.ModelSerializer):
         fields = ['id', 'quantity', 'raw_material']
 
 
-class ListRetrieveNecessaryProductSerializer(serializers.ModelSerializer):
+class RecursiveNecessaryProductSerializer(serializers.ModelSerializer):
     product = serializers.SerializerMethodField()
 
     def get_product(self, obj):
@@ -76,11 +76,29 @@ class ListRetrieveNecessaryProductSerializer(serializers.ModelSerializer):
         fields = ['id', 'quantity', 'product']
 
 
+class CreateNecessaryProductSerializer(serializers.ModelSerializer):
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects)
+    parent = serializers.PrimaryKeyRelatedField(queryset=Product.objects)
+
+    class Meta:
+        model = NecessaryProduct
+        fields = ['id', 'quantity', 'product', 'parent']
+
+
+class CreateNecessaryRawMaterialSerializer(serializers.ModelSerializer):
+    raw_material = serializers.PrimaryKeyRelatedField(queryset=RawMaterial.objects)
+    parent = serializers.PrimaryKeyRelatedField(queryset=Product.objects)
+
+    class Meta:
+        model = NecessaryRawMaterial
+        fields = ['id', 'quantity', 'parent', 'raw_material']
+
+
 class RetrieveProductSerializer(serializers.ModelSerializer):
     unit = ListRetrieveMeasurementUnitSerializer()
     types = ProductTypeSerializer(many=True)
     necessary_raw_materials = ListRetrieveNecessaryRawMaterialSerializer(many=True)
-    necessary_products = ListRetrieveNecessaryProductSerializer(many=True)
+    necessary_products = RecursiveNecessaryProductSerializer(many=True)
 
     class Meta:
         model = Product

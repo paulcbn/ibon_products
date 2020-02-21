@@ -2,11 +2,11 @@ from collections import OrderedDict
 
 from rest_framework import viewsets, filters
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from .models import Product
-from .serializers import CreateProductSerializer, RetrieveProductSerializer, ListProductSerializer
+from .models import Product, NecessaryProduct, NecessaryRawMaterial
+from .serializers import CreateProductSerializer, RetrieveProductSerializer, ListProductSerializer, \
+    CreateNecessaryProductSerializer, CreateNecessaryRawMaterialSerializer
 
 
 class MultiSerializerViewSetMixin(object):
@@ -44,3 +44,13 @@ class ProductViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
 
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     search_fields = ['name', 'description', 'types__name', 'unit__name']
+
+
+class NecessaryProductViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
+    queryset = NecessaryProduct.objects
+    serializer_class = CreateNecessaryProductSerializer
+
+
+class NecessaryRawMaterialViewSet(MultiSerializerViewSetMixin, viewsets.ModelViewSet):
+    queryset = NecessaryRawMaterial.objects
+    serializer_class = CreateNecessaryRawMaterialSerializer

@@ -1,1 +1,1 @@
-export { default as ProductsSearchIndex } from '../ProductsSearchWidget/ProductsSearchWidget';
+export { default as ProductsSearchWidget } from './ProductsSearchWidget';

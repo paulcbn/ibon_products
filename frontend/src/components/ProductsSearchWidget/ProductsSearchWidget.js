@@ -30,7 +30,8 @@ const headers = [
   },
 ];
 
-const ProductsSearchWidget = ({ actions, state }) => {
+
+const ProductsSearchWidget = ({ actions, state, tableActions }) => {
   useEffect(() => {
     actions.loadFirstPage();
   }, [ actions ]);
@@ -45,8 +46,6 @@ const ProductsSearchWidget = ({ actions, state }) => {
 
 
   const handleSort = useCallback(({ header, direction }) => {
-    console.log({ header, direction });
-
     if (!header) {
       actions.changeOrdering('');
       return;
@@ -62,6 +61,7 @@ const ProductsSearchWidget = ({ actions, state }) => {
   return <Box>
     <TableWidget
       headers={ headers }
+      actions={ tableActions }
       data={ state.results }
       title={ 'Produse' }
       count={ state.count }
@@ -72,6 +72,7 @@ const ProductsSearchWidget = ({ actions, state }) => {
       rowsPerPageOptions={ actualRowsPerPageOptions }
       onSort={ handleSort }
       loading={ state.loading }
+      onSearch={ actions.changeSearchString }
     />
   </Box>;
 };
@@ -85,6 +86,7 @@ const mapDispatchToProps = (dispatch) => ({
     loadNthPage: (n) => dispatch(products.loadNthPage(n)),
     changePageSize: (n) => dispatch(products.changePageSize(n)),
     changeOrdering: (ordering) => dispatch(products.changeOrdering(ordering)),
+    changeSearchString: (searchString) => dispatch(products.changeSearchString(searchString)),
   },
 });
 
