@@ -4,7 +4,7 @@ cryptography==2.8
 Django==3.0.3
 django-environ==0.4.5
 django-rest-knox==4.1.0
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 pycparser==2.19
 pytz==2019.3
 six==1.14.0
